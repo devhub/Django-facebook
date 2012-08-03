@@ -55,7 +55,7 @@ def connect_user(request, access_token=None, facebook_graph=None):
     if connect_facebook and request.user.is_authenticated() and not force_registration:
         #we should only allow connect if users indicate they really want to connect
         #only when the request.CONNECT_FACEBOOK = 1
-        #if this isn't present we just do a login   
+        #if this isn't present we just do a login
         action = CONNECT_ACTIONS.CONNECT
         user = _connect_user(request, facebook)
     else:
@@ -150,6 +150,8 @@ def _update_access_token(user, graph):
             if graph.access_token != profile.access_token:
                 profile.access_token = graph.access_token
                 profile.save()
+            # Extend access token to 60 days
+            profile.extend_access_token()
 
 
 def _register_user(request, facebook, profile_callback=None,
@@ -329,7 +331,7 @@ def _update_image(profile, image_url):
     image_size = len(image_content)
     content_type = http_message.type
     image_file = InMemoryUploadedFile(
-        file=image_temp, name=image_name, field_name='image', 
+        file=image_temp, name=image_name, field_name='image',
         content_type=content_type, size=image_size, charset=None
     )
     profile.image.save(image_name, image_file)

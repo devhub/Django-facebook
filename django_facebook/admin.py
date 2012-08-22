@@ -17,7 +17,7 @@ class FacebookLikeAdmin(admin.ModelAdmin):
 
 
 class FacebookProfileAdmin(admin.ModelAdmin):
-    list_display = ('image_', 'user_', 'facebook_name', 'facebook_id',)
+    list_display = ('user_', 'facebook_name', 'facebook_id',)
 
     raw_id_fields = ('user',)
 
@@ -45,8 +45,8 @@ class FacebookProfileAdmin(admin.ModelAdmin):
             instance.user
         )
     user_.allow_tags = True
-    
-    
+
+
 def facebook_profile(open_graph_share):
     '''
     Nicely displayed version of the facebook user

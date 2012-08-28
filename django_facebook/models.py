@@ -87,7 +87,7 @@ class FacebookProfileModel(models.Model):
     def _extend_access_token(self, access_token):
         from open_facebook.api import FacebookAuthorization
         results = FacebookAuthorization.extend_access_token(access_token)
-        access_token, expires = results['access_token'], results['expires']
+        access_token = results['access_token']
         self.access_token = access_token
         self.save()
         return results

@@ -50,6 +50,9 @@ FACEBOOK_REGISTRATION_TEMPLATE = getattr(settings,
 FACEBOOK_REGISTRATION_FORM = getattr(settings,
     'FACEBOOK_REGISTRATION_FORM', None)
 
+# Allow custom signup form
+FACEBOOK_FALLBACK_URL_CONNECT = getattr(settings, 'FACEBOOK_FALLBACK_URL_CONNECT', None)
+
 default_registration_backend = 'django_facebook.registration_backends.FacebookRegistrationBackend'
 FACEBOOK_REGISTRATION_BACKEND = getattr(settings, 'FACEBOOK_REGISTRATION_BACKEND', default_registration_backend)
 

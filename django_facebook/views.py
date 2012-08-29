@@ -138,8 +138,7 @@ def connect(request):
     if not settings.DEBUG and facebook_settings.FACEBOOK_HIDE_CONNECT_TEST:
         raise Http404
 
-    return render_to_response('django_facebook/connect.html', context)
-
+    return redirect(facebook_settings.FACEBOOK_FALLBACK_URL_CONNECT)
 
 def connect_async_ajax(request):
     '''

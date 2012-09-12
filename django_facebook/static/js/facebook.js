@@ -47,18 +47,40 @@ facebookClass.prototype = {
         var ithing = iphone || ipod || ipad;
         this.ithing = ithing;
     },
-    
+
+    // Function that checks needed user permissions
+    checkPermissions: function(permsNeeded) {
+      var scope = this;
+      FB.api('/me/permissions', function(response) {
+        var permsArray = response.data[0];
+
+        var permsToPrompt = [];
+        for (var i in permsNeeded) {
+          if (permsArray[permsNeeded[i]] == null) {
+            permsToPrompt.push(permsNeeded[i]);
+          }
+        }
+
+        if (permsToPrompt.length > 0) {
+          alert('Some Facebook permissions necessary to generate your Yearly Leaf are missing. Please connect with Facebook again, and don\'t uncheck any permissions.');
+        } else {
+          scope.formElement.submit();
+        }
+      });
+    },
+
     getDefaultScope : function() {
         var defaultScope;
        if (typeof(facebookDefaultScope) != 'undefined') {
-            defaultScope = facebookDefaultScope;  
+           defaultScope = facebookDefaultScope;
        } else {
            defaultScope = ['email', 'user_about_me', 'user_birthday', 'user_website'];
        }
        return defaultScope;
     },
-    
+
     connect: function (formElement, requiredPerms) {
+        this.formElement = formElement;
         if (this.ithing) {
             return formElement.submit();
         }
@@ -70,10 +92,9 @@ facebookClass.prototype = {
                 var errorMessage = gettext('Sorry, we couldn\'t log you in. Please try again.');
                 scope.connectLoading(errorMessage, true, true);
             } else {
+                scope.checkPermissions(requiredPerms);
                 //showloading
                 scope.connectLoading(gettext('Now loading your profile...'));
-                //submit the form
-                formElement.submit();
             }
         },
         {scope: requiredPerms.join(',')}
